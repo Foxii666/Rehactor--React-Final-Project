@@ -7,7 +7,6 @@ export default function SearchPage() {
   let [searchParams] = useSearchParams();
   const game = searchParams.get('query');
 
-  // Correzione: rimosso `${id}` e usato solo il parametro di ricerca
   const initialUrl = `https://api.rawg.io/api/games?key=9269195f491e44539d7a2d10ce87ab15&search=${game}`;
 
   const { loading, data, error, updateUrl } = useFetchSolutions(initialUrl);

@@ -5,7 +5,6 @@ export default function HomePage() {
   const initialUrl =
     'https://api.rawg.io/api/games?key=9269195f491e44539d7a2d10ce87ab15&dates=2024-01-01,2024-12-31&page=1';
 
-  // ✅ Usiamo il custom hook
   const { data, loading, error } = useFetchSolution(initialUrl);
 
   return (
