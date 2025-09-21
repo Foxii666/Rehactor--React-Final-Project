@@ -1,10 +1,15 @@
 import { RouterProvider } from 'react-router';
 import router from './Router/Router';
+import SessionProvider from './context/SessionProvider';
+import FavoritesProvider from './context/FavoritesProvider';
+
 function App() {
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+    <SessionProvider>
+      <FavoritesProvider>
+        <RouterProvider router={router} />
+      </FavoritesProvider>
+    </SessionProvider>
   );
 }
 

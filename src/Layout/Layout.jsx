@@ -11,14 +11,7 @@ function Layout() {
 
       <div className="flex flex-1">
         {/* Sidebar fissa a sinistra */}
-        <aside className="w-60 bg-white border-r border-gray-200 sticky top-0 h-screen overflow-y-auto p-4">
-          <Sidebar />
-        </aside>
-
-        <div className="style-searchbar-filter">
-          <Searchbar />
-        </div>
-
+        <Sidebar />
         {/* Area principale contenuti */}
         <main className="flex-1 p-6 overflow-auto">
           <Outlet />

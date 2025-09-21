@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import Layout from '../Layout/Layout';
 import AuthLayout from '../Layout/AuthLayout';
-
 import Homepage from '../Pages/HomePage';
 import Errorpage from '../error/ErrorPage';
 import GenrePage from '../Pages/GenrePage';
@@ -9,6 +8,7 @@ import GamePage from '../Pages/GamePage';
 import SearchPage from '../Pages/SearchPage';
 import Register from '../auth/Register';
 import Login from '../auth/Login';
+import AccountPage from '../Pages/AccountPage';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         Component: Homepage,
       },
       {
-        path: 'games/:genr',
+        path: 'games/:genre',
         Component: GenrePage,
       },
       {
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: 'register',
         Component: Register,
+      },
+      {
+        path: 'AccountPage',
+        Component: AccountPage,
       },
     ],
   },
