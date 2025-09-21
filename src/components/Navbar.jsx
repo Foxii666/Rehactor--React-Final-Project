@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import supabase from '../supabase/supabase-client';
-import GenresDropdown from './GenresDropdown';
 import {
   FaUserCircle,
   FaSignOutAlt,
@@ -9,21 +8,23 @@ import {
   FaUserPlus,
   FaSearch,
   FaTimes,
+  FaBars, // Icon for mobile menu
+  FaList,
 } from 'react-icons/fa';
-import Searchbar from './Searchbar';
 
-// LogoutButton bileşeni (stil güncellendi)
+// LogoutButton component
 function LogoutButton({ setSession }) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      alert('Errore durante il logout: ' + error.message);
+      // Replaced alert with console.error as per guidelines
+      console.error('Error during logout: ' + error.message);
       return;
     }
     setSession(null);
-    navigate('/');
+    navigate('/Homepage');
   };
 
   return (
@@ -37,7 +38,84 @@ function LogoutButton({ setSession }) {
   );
 }
 
-function Navbar() {
+// Searchbar component
+function Searchbar({ onClose }) {
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/search?query=${encodeURIComponent(query)}`);
+      setQuery('');
+      if (onClose) {
+        onClose();
+      }
+    }
+  };
+
+  return (
+    <form onSubmit={handleSearch} className="flex items-center w-full">
+      <input
+        type="text"
+        placeholder="Search for games..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="flex-grow px-4 py-2 rounded-l-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        className="px-4 py-3 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-colors"
+      >
+        <FaSearch />
+      </button>
+    </form>
+  );
+}
+
+// Dummy GenresDropdown component for demonstration
+function GenresDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center text-gray-200 text-base hover:text-gray-400 transition-colors focus:outline-none"
+      >
+        <FaList className="mr-2" />
+        Genres
+      </button>
+      {isOpen && (
+        <div className="absolute left-0 mt-2 py-2 w-48 bg-gray-800 rounded-md shadow-xl z-20">
+          <Link
+            to="/genres/action"
+            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            Action
+          </Link>
+          <Link
+            to="/genres/rpg"
+            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            RPG
+          </Link>
+          <Link
+            to="/genres/adventure"
+            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
+            onClick={() => setIsOpen(false)}
+          >
+            Adventure
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Navbar() {
   const [session, setSession] = useState(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -64,26 +142,29 @@ function Navbar() {
 
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-900 text-gray-200 shadow-lg relative">
-      <h2 className="text-2xl font-bold">
+      <h2 className="ms-10 text-2xl font-bold">
         <Link to="/Homepage" className="hover:text-gray-400 transition-colors">
           GameHub
         </Link>
       </h2>
 
-      {/* Ana menü ve arama çubuğu */}
       <div className="flex items-center space-x-4">
-        {/* Masaüstü arama çubuğu */}
+        {/* Desktop Searchbar */}
         <div className="hidden md:block">
           <Searchbar />
         </div>
 
-        {/* Mobil için arama butonu */}
+        {/* Mobile Search Button */}
         <button
           onClick={() => setIsSearchOpen(true)}
           className="md:hidden text-gray-200 text-xl"
         >
           <FaSearch />
         </button>
+
+        <div className="hidden md:block">
+          <GenresDropdown />
+        </div>
 
         {session ? (
           <div className="relative">
@@ -93,7 +174,7 @@ function Navbar() {
             >
               <FaUserCircle className="mr-2 text-2xl" />
               <span className="hidden md:inline">
-                Ciao, {session.user.email}
+                Hello, {session.user.email}
               </span>
             </button>
             <div
@@ -107,7 +188,7 @@ function Navbar() {
                 onClick={() => setIsUserMenuOpen(false)}
               >
                 <FaUserCircle className="mr-2" />
-                Il mio account
+                My Account
               </Link>
               <div className="border-t border-gray-700 my-1" />
               <LogoutButton setSession={setSession} />
@@ -135,9 +216,9 @@ function Navbar() {
         )}
       </div>
 
-      {/* Mobil tam ekran arama çubuğu */}
+      {/* Mobile full-screen search bar */}
       <div
-        className={`fixed inset-0 bg-gray-900 z-50 p-4 transition-transform ${
+        className={`fixed inset-0 bg-gray-900 z-50 p-4 transition-transform duration-300 ease-in-out ${
           isSearchOpen ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
@@ -149,9 +230,8 @@ function Navbar() {
             <FaTimes />
           </button>
         </div>
+        <Searchbar onClose={() => setIsSearchOpen(false)} />
       </div>
     </nav>
   );
 }
-
-export default Navbar;
