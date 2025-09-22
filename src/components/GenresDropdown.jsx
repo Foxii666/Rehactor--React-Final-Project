@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router'; // Düzeltildi: react-router -> react-router-dom
+import { Link } from 'react-router';
 import useFetchSolution from '../hook/useFetchSolution';
 import { FaBars, FaTimes } from 'react-icons/fa';
 

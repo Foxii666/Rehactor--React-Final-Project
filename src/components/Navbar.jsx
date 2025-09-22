@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router'; // v5 için bıraktım
 import supabase from '../supabase/supabase-client';
 import {
   FaUserCircle,
@@ -8,8 +8,6 @@ import {
   FaUserPlus,
   FaSearch,
   FaTimes,
-  FaBars, // Icon for mobile menu
-  FaList,
 } from 'react-icons/fa';
 
 // LogoutButton component
@@ -19,7 +17,6 @@ function LogoutButton({ setSession }) {
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      // Replaced alert with console.error as per guidelines
       console.error('Error during logout: ' + error.message);
       return;
     }
@@ -48,9 +45,7 @@ function Searchbar({ onClose }) {
     if (query.trim()) {
       navigate(`/search?query=${encodeURIComponent(query)}`);
       setQuery('');
-      if (onClose) {
-        onClose();
-      }
+      if (onClose) onClose();
     }
   };
 
@@ -73,72 +68,33 @@ function Searchbar({ onClose }) {
   );
 }
 
-// Dummy GenresDropdown component for demonstration
-function GenresDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center text-gray-200 text-base hover:text-gray-400 transition-colors focus:outline-none"
-      >
-        <FaList className="mr-2" />
-        Genres
-      </button>
-      {isOpen && (
-        <div className="absolute left-0 mt-2 py-2 w-48 bg-gray-800 rounded-md shadow-xl z-20">
-          <Link
-            to="/genres/action"
-            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
-            onClick={() => setIsOpen(false)}
-          >
-            Action
-          </Link>
-          <Link
-            to="/genres/rpg"
-            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
-            onClick={() => setIsOpen(false)}
-          >
-            RPG
-          </Link>
-          <Link
-            to="/genres/adventure"
-            className="block px-4 py-2 hover:bg-gray-700 transition-colors"
-            onClick={() => setIsOpen(false)}
-          >
-            Adventure
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function Navbar() {
   const [session, setSession] = useState(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Mevcut session'ı al
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
+      if (data.session) navigate('/Homepage'); // sayfa yenilenince yönlendirme
     });
 
+    // Auth değişikliklerini dinle
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
+      (_event, newSession) => {
+        setSession(newSession);
+        if (newSession) navigate('/Homepage'); // login olduğunda yönlendir
       }
     );
 
     return () => {
       listener.subscription.unsubscribe();
     };
-  }, []);
+  }, [navigate]);
 
-  const toggleUserMenu = () => {
-    setIsUserMenuOpen(!isUserMenuOpen);
-  };
+  const toggleUserMenu = () => setIsUserMenuOpen(!isUserMenuOpen);
 
   return (
     <nav className="flex items-center justify-between p-4 bg-gray-900 text-gray-200 shadow-lg relative">
@@ -161,10 +117,6 @@ export default function Navbar() {
         >
           <FaSearch />
         </button>
-
-        <div className="hidden md:block">
-          <GenresDropdown />
-        </div>
 
         {session ? (
           <div className="relative">

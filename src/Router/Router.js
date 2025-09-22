@@ -35,6 +35,10 @@ const router = createBrowserRouter([
         path: '*',
         Component: Errorpage,
       },
+      {
+        path: 'AccountPage',
+        Component: AccountPage,
+      },
     ],
   },
   {
@@ -48,10 +52,6 @@ const router = createBrowserRouter([
       {
         path: 'register',
         Component: Register,
-      },
-      {
-        path: 'AccountPage',
-        Component: AccountPage,
       },
     ],
   },
