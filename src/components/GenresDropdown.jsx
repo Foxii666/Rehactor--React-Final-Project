@@ -19,7 +19,9 @@ export default function GenresSidebar() {
       {/* Mobil Görünüm İçin Buton */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 absolute top-4 left-4 z-50 text-gray-800"
+        className={`md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 absolute top-4 left-4 z-50 text-gray-800 ${
+          isOpen ? 'hidden' : ''
+        }`}
       >
         <FaBars size={24} />
       </button>

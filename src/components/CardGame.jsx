@@ -1,5 +1,5 @@
 import LazyLoadGameImage from './LazyLoadGameImage';
-import { Link } from 'react-router'; // Use react-router-dom for Link
+import { Link } from 'react-router';
 import { FaCalendarAlt, FaGamepad, FaInfoCircle } from 'react-icons/fa'; // Add some icons for clarity
 
 export default function CardGame({ game }) {
