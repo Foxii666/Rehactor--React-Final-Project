@@ -237,7 +237,7 @@ function AccountPage() {
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="md:w-1/3">
                   <div className="bg-gray-50 p-6 rounded-xl">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
+                    <h3 className="text-lg text-center font-medium text-gray-900 mb-4">
                       Profile Picture
                     </h3>
                     <div className="flex justify-center mb-4">
