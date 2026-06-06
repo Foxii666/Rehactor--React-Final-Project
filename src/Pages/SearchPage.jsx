@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router';
-import { FaStar, FaCalendarAlt, FaGamepad } from 'react-icons/fa';
+import React, { useEffect } from "react";
+import { useSearchParams, Link } from "react-router";
+import { FaStar, FaCalendarAlt, FaGamepad } from "react-icons/fa";
 
 // CardGame component - HomePage'dekiyle TAMAMEN AYNI
 const CardGame = ({ game }) => {
@@ -10,13 +10,13 @@ const CardGame = ({ game }) => {
         <img
           src={
             game.background_image ||
-            'https://placehold.co/400x250/4a5568/fff?text=No+Image'
+            "https://placehold.co/400x250/4a5568/fff?text=No+Image"
           }
           alt={game.name}
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
           onError={(e) => {
             e.target.src =
-              'https://placehold.co/400x250/4a5568/fff?text=No+Image';
+              "https://placehold.co/400x250/4a5568/fff?text=No+Image";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -24,7 +24,7 @@ const CardGame = ({ game }) => {
         {/* Rating badge */}
         <div className="absolute top-3 right-3 bg-indigo-600 text-white text-sm font-bold px-2 py-1 rounded-md flex items-center">
           <FaStar className="mr-1 text-yellow-300" />
-          {game.rating || 'N/A'}
+          {game.rating || "N/A"}
         </div>
       </div>
 
@@ -35,7 +35,7 @@ const CardGame = ({ game }) => {
 
         <div className="flex items-center text-gray-400 mb-3">
           <FaCalendarAlt className="mr-2" />
-          <span className="text-sm">{game.released || 'TBA'}</span>
+          <span className="text-sm">{game.released || "TBA"}</span>
         </div>
 
         <div className="flex flex-wrap gap-1 mb-4">
@@ -51,7 +51,7 @@ const CardGame = ({ game }) => {
       </div>
       <div className="p-4 mt-2">
         <Link
-          to={`/game/${game.id}`}
+          to={`/games/${game.slug}/${game.id}`}
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
         >
           <FaGamepad className="mr-2" />
@@ -76,7 +76,7 @@ const useFetchSolution = (initialUrl) => {
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
         setData(result);
@@ -96,7 +96,7 @@ const useFetchSolution = (initialUrl) => {
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams();
-  const game = searchParams.get('query');
+  const game = searchParams.get("query");
 
   const initialUrl = `https://api.rawg.io/api/games?key=9269195f491e44539d7a2d10ce87ab15&search=${game}`;
 
@@ -105,7 +105,7 @@ export default function SearchPage() {
   useEffect(() => {
     if (game) {
       updateUrl(
-        `https://api.rawg.io/api/games?key=9269195f491e44539d7a2d10ce87ab15&search=${game}`
+        `https://api.rawg.io/api/games?key=9269195f491e44539d7a2d10ce87ab15&search=${game}`,
       );
     }
   }, [game, updateUrl]);
